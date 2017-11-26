@@ -23,3 +23,13 @@ LINEBOT_CHANNEL_TOKEN=
 
 https://您的域名/callback
 
+訊息API推播測試
+
+網址傳入:
+
+https://您的域名/api/push_text?message=這是推播訊息&to=[UserId]
+
+查看Laravel的Log可以看到userId
+<pre>
+tail -f storage/logs/laravel.log 
+</pre>
