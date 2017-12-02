@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Http\Request;
+use GuzzleHttp\Client;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,15 +18,51 @@ Route::middleware('auth:api')->get('/user', function (Request $request) {
     return $request->user();
 });
 
-//網址傳入: https://example.dev/api/push_text?message=訊息&to=abcdefgj使用者IDijklomn
-Route::get('push_text', function(Request $request){
+Route::get('text', function(Request $request){
 
     $message=$request->message;
-    $to=$request->to;
-
+    $to=$request->to;//UserId or GroupId
     $bot = resolve('LINE\LINEBot');
     $textMessageBuilder = new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($message);
-    $bot->pushMessage($to, $textMessageBuilder);
+    $resp=$bot->pushMessage($to, $textMessageBuilder);
 
-    return response('OK', 200);
+    //$this->userId=$jsonObj->{"events"}[0]->{"source"}->{"userId"};
+    if($resp->isSucceeded()){
+        return response("Succeeded","200");
+    }
+
+    $type='application/json';
+    return response($resp->getRawBody(),"200")
+        ->header('Content-Type', $type);;
+});
+
+Route::get('profile/{userId}', function(Request $request){
+
+    $token = env('LINEBOT_CHANNEL_TOKEN');
+      $http = new Client;
+    
+      $api_url=sprintf("https://api.line.me/v2/bot/profile/%s",$request->userId);
+      $response = $http->request('GET', $api_url, [
+	  'headers' => [
+	      'Authorization' => 'Bearer '.$token,
+	  ],
+      ]);
+
+      $response = json_decode((string) $response->getBody(), true);
+      return $response;
+
+});
+
+Route::get('group/{groupId}/member/{userId}', function(Request $request){
+
+    $token = env('LINEBOT_CHANNEL_TOKEN');
+      $http = new Client;
+      $api_url=sprintf("https://api.line.me/v2/bot/group/%s/member/%s", $request->groupId, $request->userId);
+      $response = $http->request('GET', $api_url, [
+	  'headers' => [
+	      'Authorization' => 'Bearer '.$token,
+	  ],
+      ]);
+      $response = json_decode((string) $response->getBody(), true);
+      return $response;
 });
