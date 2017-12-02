@@ -26,7 +26,6 @@ Route::get('text', function(Request $request){
     $textMessageBuilder = new \LINE\LINEBot\MessageBuilder\TextMessageBuilder($message);
     $resp=$bot->pushMessage($to, $textMessageBuilder);
 
-    //$this->userId=$jsonObj->{"events"}[0]->{"source"}->{"userId"};
     if($resp->isSucceeded()){
         return response("Succeeded","200");
     }
