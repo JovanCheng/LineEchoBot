@@ -4,6 +4,10 @@
 git clone https://github.com/DevinY/LineEchoBot.git line
 </pre>
 
+
+## 提供一個簡單的ChineseDictionary基本架構參考
+### 包含回傳圖片及座標
+
 安裝及產生App Key
 <pre>
 cd line
@@ -18,6 +22,15 @@ LINEBOT_CHANNEL_ID=
 LINEBOT_CHANNEL_SECRET=
 LINEBOT_CHANNEL_TOKEN=
 </pre>
+
+幫助大家快速進入，直接提供內建基本的測試用的資料庫。
+
+請在.env中設定您測試用的資料庫。
+<pre>
+php artisan migrte
+php artisan db:seed
+</pre>
+
 
 預設Webhook URL Requires SSL(需使用https://)
 
