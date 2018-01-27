@@ -3,8 +3,8 @@
 namespace App;
 
 use Illuminate\Database\Eloquent\Model;
-
-class People extends Model
+use Log;
+class Idiom extends Model
 {
-    //
+
 }
