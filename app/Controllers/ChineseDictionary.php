@@ -35,7 +35,7 @@ class ChineseDictionary {
       }
     }
     //==================查部首====================
-    $subfix = ['是什麼部首$','是什麼部$','什麼部','部首是什麼','的部首$','是什麼部首$'];
+    $subfix = ['是什麼部首$','是什麼部$','什麼部','部首是什麼','的部首$','部首$','是什麼部首$'];
     foreach($subfix as $keyword){
       if(preg_match("/(.+)$keyword/uim", $this->userText, $matches)){
         $this->userText = rtrim($matches[1],'?');
@@ -214,7 +214,14 @@ class ChineseDictionary {
   	try{
   		$first_word = mb_substr(rtrim($this->userText,"?"),0,1,"UTF-8");
   		$word = Dictionary::where('word',$first_word)->firstOrFail();
-  		return $word->phonetic;
+
+      $multitone=[$word->phonetic,$word->multitone];
+      if(preg_match('/(二)|(三)/uim', $word->phonetic))
+      {
+        $multitone=[$word->multitone,$word->phonetic];
+      }
+
+  		return implode("\n",$multitone);
   	}catch(ModelNotFoundException $e){
   		return "";
   	}

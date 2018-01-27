@@ -5,9 +5,8 @@ namespace App\Controllers;
 use App\Link;
 use App\Memory;
 use App\User;
-use App\Dictionary;
+use App\Dictionary; //字典
 use App\Idiom; //成語
-use App\Word;  //辭典
 use App\Controllers\Memorize;
 use Log;
 use Illuminate\Database\Eloquent\ModelNotFoundException;
@@ -23,8 +22,8 @@ class BotBrainController extends Memorize
   /*
   設記概念:
   一、傳入文字，由Controller決定傳入的文字是否需回應。
-  二、判斷為需回應時，查詢Model。
-  三、有查到吐出回應結果的存文字，查不到回傳空白。
+  二、透過pattern格式，判斷為需回應時，找相關的Model進行回覆。
+  三、有查到就吐出回應結果的存文字，查不到回傳空白。
   */
   $answer = (new ChineseDictionary($userText))->解釋();
   if(''!=$answer) return ['text'=>$answer];
