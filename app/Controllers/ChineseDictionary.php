@@ -70,6 +70,15 @@ class ChineseDictionary {
         return true;
       }
     }
+    //===================的成語=========================
+    $subfix = ['的成語'];
+    foreach($subfix as $keyword){
+      if(preg_match("/(.+)$keyword/uim", $this->userText, $matches)){
+        $this->userText = rtrim($matches[1],'?');
+        $this->rule=7;
+        return true;
+      }
+    }
     //==================成語判定=======================
     if(mb_strlen($this->userText,"UTF-8")==4) {
         Log::info("四個字的成語");
@@ -117,6 +126,9 @@ class ChineseDictionary {
       return $this->拼音();
     }elseif($this->rule==5){
       return $this->筆劃();
+    }elseif($this->rule==7){
+      //一的成語
+      return $this->什麼的成語();
     }elseif($this->rule==6){
       return $this->成語();
     }
@@ -155,7 +167,7 @@ class ChineseDictionary {
                 break;
             case '典故':
                 try{
-                    $answer = Idiom::where('word',$this->userText)->firstOrFail()->story_explanation;
+                    $answer = Idiom::where('word',$this->userText)->firstOrFail()->story;
                     if($answer=='') return sprintf("這是個成語，但我不懂這個%s。",$this->keyword);
                     return $answer;
                 }catch(ModelNotFoundException $e){
@@ -171,7 +183,7 @@ class ChineseDictionary {
                 break;
             case '出處':
                 try{
-                   return Idiom::where('word',$this->userText)->firstOrFail()->story_explanation;
+                   return Idiom::where('word',$this->userText)->firstOrFail()->origin;
                 }catch(ModelNotFoundException $e){
                     return "";
                 }
@@ -208,6 +220,22 @@ class ChineseDictionary {
             return "";
 
  }
+
+ public function 什麼的成語(){
+
+  try{
+    $answer = Idiom::where('word','like',"$this->userText%")->get();
+    if($answer=='') return sprintf("這是個成語，但我不懂這個%s。",$this->keyword);
+    $reply="";
+    foreach($answer as $item){
+      $reply.="$item->word\n";
+    }
+    return $reply;
+  }catch(ModelNotFoundException $e){
+    return "";
+  }
+
+}
 
   public function 注音讀音(){
 
