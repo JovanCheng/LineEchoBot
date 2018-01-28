@@ -20,10 +20,11 @@ class BotBrainController extends Memorize
 
   //中文字典
   /*
-  設記概念:
+  設計概念:
   一、傳入文字，由Controller決定傳入的文字是否需回應。
-  二、透過pattern格式，判斷為需回應時，找相關的Model進行回覆。
-  三、有查到就吐出回應結果的存文字，查不到回傳空白。
+  二、透過一個check的method，檢測pattern格式，判斷是否需回應。
+  三、需回應時，丟給相應的mehtods進行model的查詢，
+  有查到就吐出回應結果的存文字，查不到回傳空白。
   */
   $answer = (new ChineseDictionary($userText))->解釋();
   if(''!=$answer) return ['text'=>$answer];
