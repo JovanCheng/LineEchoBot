@@ -46,3 +46,5 @@ https://您的域名/api/push_text?message=這是推播訊息&to=[UserId]
 <pre>
 tail -f storage/logs/laravel.log 
 </pre>
+
+[youtube影片教學](https://www.youtube.com/watch?v=xu5WfUHuzf0&feature=youtu.be&t=5m35s)
